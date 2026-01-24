@@ -3,6 +3,7 @@ import { fetchAllExpenses, getExpensesByMonth, insertExpenses } from "./src/serv
 import { getMonthlySummary, getMonthlySummaryByMonth } from "./src/services/monthlySummaryService.js";
 import { insertIncome } from "./src/services/incomeService.js";
 import cors from "cors";
+import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 
 const port = 3000;
 const app = express();
@@ -85,12 +86,12 @@ app.get("/monthly-summary/:month", async (req, res) => {
     }
 });
 
-app.post("/analyze", async (_, res) => {
+app.get("/analyze/recommendations/:month", async (req, res) => {
     try {
-        const result = await analyzeData();
-        res.json({ status: "success", result });
-    } catch (err) {
-        res.status(500).json({ status: "failure", error: err.message });
+        const result = await analyzeRecommendations(req.params.month);
+        res.json(result);
+    } catch (e) {
+        res.status(400).json({ error: e.message });
     }
 });
 
