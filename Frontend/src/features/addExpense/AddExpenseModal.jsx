@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Close, CalendarToday, Description, Category, AttachMoney } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import { addExpense } from '../../services/apiService';
 
 // --- CONSTANTS ---
 const EXPENSE_CATEGORIES = {
@@ -64,15 +65,16 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit =async () => {
     // Validate amount
     if (!formData.amount) return;
     
     // Call the parent service method
-    onSave({
+    const responseData=await addExpense([{
         ...formData,
         amount: parseFloat(formData.amount)
-    });
+    }]);
+    console.log(responseData);
     onClose();
   };
 
@@ -139,7 +141,7 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
               select
               fullWidth
               label="Category"
-              name="category_code"
+              name="category"
               value={formData.category_code}
               onChange={handleChange}
               InputProps={{
