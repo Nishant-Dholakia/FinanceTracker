@@ -1,18 +1,27 @@
 import express from "express";
 import { fetchAllExpenses, insertExpenses } from "./src/services/expenseService.js";
-
+import cors from "cors";
 const port = 3000;
 const app = express();
 app.use(express.json());
 
+app.use(
+    cors({
+        origin: "http://localhost:5174", // ✅ your frontend
+        credentials: true, // ✅ allow cookies/credentials
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    })
+);
 app.get("/health", (_, res) => {
     res.json({ status: "ok" });
 });
 
 app.post("/expenses", async (req, res) => {
+    // console.log("api called")
     try {
+        // console.log(req.body)
         const inserted = await insertExpenses(req.body);
-
         res.status(201).json({
             status: "success",
             inserted,

@@ -13,10 +13,8 @@ function inferDiscretionary(category) {
     );
 }
 
-export async function insertExpenses({ income, expenses }) {
-    if (typeof income !== "number" || income <= 0) {
-        throw new Error("Invalid income");
-    }
+export async function insertExpenses(expenses ) {
+    // console.log("in expense insert : ", expenses)
 
     if (!Array.isArray(expenses) || expenses.length === 0) {
         throw new Error("Expenses must be a non-empty array");

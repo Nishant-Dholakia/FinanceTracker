@@ -3,7 +3,6 @@ import { insertExpenses } from "../services/expenseService.js";
 async function test() {
     try {
         const inserted = await insertExpenses({
-            income: 85000,
             expenses: [
                 {
                     amount: 12000,
