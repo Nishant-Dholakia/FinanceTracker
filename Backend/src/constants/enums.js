@@ -1,0 +1,14 @@
+export const EXPENSE_CATEGORIES = {
+    FOOD: "FOOD",
+    TRANSPORT: "TRANSPORT",
+    SHOPPING: "SHOPPING",
+    UTILITIES: "UTILITIES",
+    ENTERTAINMENT: "ENTERTAINMENT",
+    OTHER: "OTHER",
+};
+
+export const RISK_LEVELS = {
+    LOW: "LOW",
+    MODERATE: "MODERATE",
+    HIGH: "HIGH",
+};
