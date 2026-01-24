@@ -38,7 +38,7 @@ const DarkTextField = styled(TextField)({
     backgroundColor: 'rgba(255, 255, 255, 0.03)',
     '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
     '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-    '&.Mui-focused fieldset': { borderColor: '#F97316' }, // Primary Orange
+    '&.Mui-focused fieldset': { borderColor: '#F97316' },
   },
   '& .MuiInputLabel-root': { color: '#9CA3AF' },
   '& .MuiInputLabel-root.Mui-focused': { color: '#F97316' },
@@ -52,9 +52,9 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
     amount: '',
     currency: 'USD',
     description: '',
-    category_code: 'FOOD',
+    category: 'FOOD',
     is_discretionary: false,
-    transaction_date: new Date().toISOString().split('T')[0] // Default to today YYYY-MM-DD
+    transaction_date: new Date().toISOString().split('T')[0]
   });
 
   const handleChange = (e) => {
@@ -65,27 +65,26 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
     }));
   };
 
-  const handleSubmit =async () => {
-    // Validate amount
+  const handleSubmit = async () => {
     if (!formData.amount) return;
-    
-    // Call the parent service method
-    const responseData=await addExpense([{
-        ...formData,
-        amount: parseFloat(formData.amount)
+
+    const responseData = await addExpense([{
+      ...formData,
+      amount: parseFloat(formData.amount)
     }]);
+
     console.log(responseData);
     onClose();
   };
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onClose={onClose}
       PaperProps={{
         sx: {
           borderRadius: 6,
-          backgroundColor: '#1e2330', // Card background color from dashboard
+          backgroundColor: '#1e2330',
           backgroundImage: 'none',
           maxWidth: '500px',
           width: '100%',
@@ -94,10 +93,14 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
         }
       }}
     >
-      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
-        <Typography variant="h5" fontWeight="bold" sx={{ color: 'white' }}>
+      <DialogTitle
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}
+      >
+        {/* ✅ component="span" prevents <h5> inside <h2> */}
+        <Typography component="span" variant="h5" fontWeight="bold" sx={{ color: 'white' }}>
           New Expense
         </Typography>
+
         <IconButton onClick={onClose} sx={{ color: '#9CA3AF' }}>
           <Close />
         </IconButton>
@@ -105,8 +108,7 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
 
       <DialogContent sx={{ pt: 3 }}>
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          
-          {/* AMOUNT & CURRENCY */}
+
           <Grid item xs={8}>
             <DarkTextField
               fullWidth
@@ -120,6 +122,7 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
               }}
             />
           </Grid>
+
           <Grid item xs={4}>
             <DarkTextField
               select
@@ -135,14 +138,13 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
             </DarkTextField>
           </Grid>
 
-          {/* CATEGORY */}
           <Grid item xs={12}>
             <DarkTextField
               select
               fullWidth
               label="Category"
-              name="category"
-              value={formData.category_code}
+              name="category"          // ✅ FIX
+              value={formData.category}
               onChange={handleChange}
               InputProps={{
                 startAdornment: <InputAdornment position="start"><Category /></InputAdornment>,
@@ -156,7 +158,6 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
             </DarkTextField>
           </Grid>
 
-          {/* DATE */}
           <Grid item xs={12}>
             <DarkTextField
               fullWidth
@@ -172,7 +173,6 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
             />
           </Grid>
 
-          {/* DESCRIPTION */}
           <Grid item xs={12}>
             <DarkTextField
               fullWidth
@@ -188,31 +188,34 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
             />
           </Grid>
 
-          {/* IS DISCRETIONARY SWITCH */}
           <Grid item xs={12}>
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center', 
-                bgcolor: 'rgba(255,255,255,0.03)', 
-                p: 2, 
-                borderRadius: 4 
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              bgcolor: 'rgba(255,255,255,0.03)',
+              p: 2,
+              borderRadius: 4
             }}>
-                <Box>
-                    <Typography variant="body1" color="white" fontWeight="medium">Discretionary Spending?</Typography>
-                    <Typography variant="caption" color="#9CA3AF">Was this purchase optional?</Typography>
-                </Box>
-                <FormControlLabel
-                    control={
-                        <Switch 
-                            checked={formData.is_discretionary} 
-                            onChange={handleChange} 
-                            name="is_discretionary" 
-                            color="warning" // Uses the orange color
-                        />
-                    }
-                    label="" 
-                />
+              <Box>
+                <Typography variant="body1" color="white" fontWeight="medium">
+                  Discretionary Spending?
+                </Typography>
+                <Typography variant="caption" color="#9CA3AF">
+                  Was this purchase optional?
+                </Typography>
+              </Box>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={formData.is_discretionary}
+                    onChange={handleChange}
+                    name="is_discretionary"
+                    color="warning"
+                  />
+                }
+                label=""
+              />
             </Box>
           </Grid>
 
@@ -223,16 +226,16 @@ const AddExpenseModal = ({ open, onClose, onSave }) => {
         <Button onClick={onClose} sx={{ color: '#9CA3AF', borderRadius: 3, px: 3 }}>
           Cancel
         </Button>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={handleSubmit}
-          sx={{ 
-            borderRadius: 3, 
-            px: 4, 
+          sx={{
+            borderRadius: 3,
+            px: 4,
             py: 1.2,
-            bgcolor: '#F97316', 
+            bgcolor: '#F97316',
             fontWeight: 'bold',
-            '&:hover': { bgcolor: '#ea580c' } 
+            '&:hover': { bgcolor: '#ea580c' }
           }}
         >
           Save Expense
