@@ -8,13 +8,13 @@ async function test() {
                     amount: 12000,
                     description: "shopify",
                     category: "SHOPPING",
-                    transaction_date: "2019-05-05",
+                    transaction_date: "2026-01-05",
                 },
                 {
                     amount: 25000,
                     description: "Github ai",
                     category: "OTHER",
-                    transaction_date: "2019-05-10",
+                    transaction_date: "2026-01-10",
                 },
             ],
         });
