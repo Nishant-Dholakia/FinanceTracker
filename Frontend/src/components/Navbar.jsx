@@ -1,14 +1,15 @@
 // src/components/Navbar.jsx
 import React, { useState } from 'react';
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  InputBase,
-  Badge,
-  Avatar,
-  Box,
+
+import { 
+  AppBar, 
+  Toolbar, 
+  IconButton, 
+  Typography, 
+  InputBase, 
+  Badge, 
+  Avatar, 
+  Box, 
   useTheme,
   Button
 } from '@mui/material';
@@ -182,18 +183,34 @@ const Navbar = ({ onMenuClick }) => {
               Add Expense
             </Button>
             <Button
-              variant="contained"
-              startIcon={<AccountBalanceWallet />}
-              onClick={() => setIsIncomeModalOpen(true)}
-              sx={{
-                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                borderRadius: '20px',
-                textTransform: 'none',
-                fontWeight: 600,
-                px: 3,
-                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
-                display: { xs: 'none', sm: 'flex' }
-              }}
+  variant="outlined"
+  onClick={() => navigate("/monthly-insights")}
+  sx={{
+    borderRadius: '20px',
+    textTransform: 'none',
+    fontWeight: 600,
+    px: 3,
+    color: '#F97316',
+    borderColor: '#F97316',
+    display: { xs: 'none', sm: 'flex' }
+  }}
+>
+  Monthly Insights
+</Button>
+
+            <Button
+                variant="contained"
+                startIcon={<AccountBalanceWallet />}
+                onClick={() => setIsIncomeModalOpen(true)}
+                sx={{
+                    background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                    borderRadius: '20px',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    px: 3,
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+                    display: { xs: 'none', sm: 'flex' }
+                }}
             >
               Add Income
             </Button>

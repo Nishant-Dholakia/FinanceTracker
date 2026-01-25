@@ -119,7 +119,17 @@ app.post("/anomalies/month", async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err.message });
-    }
+    }});
+
+app.get("/api/monthly-insights", async (req, res) => {
+  try {
+    const { month } = req.query;
+    const result = await analyzeRecommendations(month);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 

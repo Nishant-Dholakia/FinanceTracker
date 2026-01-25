@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { supabase } from "../supabaseClient.js";
 
 export async function analyzeRecommendations(month) {
+    console.log(month);
     if (!/^\d{4}-\d{2}-01$/.test(month)) {
         throw new Error("Month must be YYYY-MM-01");
     }

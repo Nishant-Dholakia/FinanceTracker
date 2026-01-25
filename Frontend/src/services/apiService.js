@@ -30,4 +30,11 @@ export const getMonthlySummaryByMonth = async (month) => {
   return response.data;
 };
 
+export const fetchMonthlyInsights = async (month) => {
+  const response = await apiClient.get("/api/monthly-insights", {
+    params: { month }, // 👈 query string
+  });
+  return response.data;
+};
+
 
