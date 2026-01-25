@@ -2,6 +2,7 @@ import express from "express";
 import { fetchAllExpenses, insertExpenses } from "./src/services/expenseService.js";
 import cors from "cors";
 import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
+import { insertIncome } from "./src/services/incomeService.js";
 
 const port = 3000;
 const app = express();
@@ -9,7 +10,7 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: "http://localhost:5174", // ✅ your frontend
+        origin: "http://localhost:5173", // ✅ your frontend
         credentials: true, // ✅ allow cookies/credentials
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
@@ -56,6 +57,7 @@ app.get("/expenses/month/:month", async (req, res) => {
 
 app.post("/income", async (req, res) => {
     try {
+        console.log(req.body)
         await insertIncome(req.body);
         res.status(201).json({ status: "success" });
     } catch (err) {

@@ -6,7 +6,15 @@ export const getAllExpenses = async () => {
 };
 
 export const addExpense = async (expensesData) => {
-  console.log(expensesData);
+  // console.log(expensesData);
     const response = await apiClient.post(`/expenses`,expensesData);
   return response.data;
 };
+
+export const addIncomeToMonth = async (incomeData) => {
+  console.log(incomeData);
+    const response = await apiClient.post(`/income`,incomeData);
+  return response.data;
+};
+
+
