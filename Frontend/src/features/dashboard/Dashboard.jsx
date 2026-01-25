@@ -12,9 +12,7 @@ import MainCharts from './components/MainCharts';
 import { processDashboardData } from './utils/DashboardHelper.jsx';
 
 // Service (Assuming you have this)
-// import { getAllExpenses } from "../../services/apiService";
-
-
+import { getAllExpenses } from '../../services/apiService'
 
 // --- THEME ---
 const darkTheme = createTheme({
@@ -120,23 +118,27 @@ const Dashboard = () => {
           ) : (
              <>
                {/* 1. Pass currency to Header */}
-            <DashboardHeader 
+            {/* <DashboardHeader 
                 user={dashboardData.user} 
                 balance={dashboardData.balance} 
                 currency={dashboardData.currency} 
-            />
+            /> */}
 
               <div className="grid grid-cols-12 gap-6">
                 {/* 2. Pass currency to StatsRow (Make sure StatsRow uses the getCurrencySymbol util internally or accepts this prop) */}
                 <StatsRow 
                     data={dashboardData} 
                     currency={dashboardData.currency} 
+                    selectedYear={selectedYear}
+                        selectedMonth={selectedMonth}
                 />
                 
                 {/* 3. Pass currency to MainCharts */}
                 <MainCharts 
                     data={dashboardData} 
                     currency={dashboardData.currency} 
+                    selectedYear={selectedYear}
+                        selectedMonth={selectedMonth}
                 />
             </div>
              </>
