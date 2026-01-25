@@ -4,6 +4,7 @@ import cors from "cors";
 import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 import { insertIncome } from "./src/services/incomeService.js";
 import { getMonthlySummaryByMonth } from "./src/services/monthlySummaryService.js";
+import { detect_anomaly } from "./src/services/anomalyService.js";
 
 const port = 3000;
 const app = express();
@@ -22,9 +23,9 @@ app.get("/health", (_, res) => {
 });
 
 app.post("/expenses", async (req, res) => {
-    // console.log("api called")
+    console.log("api called")
     try {
-        // console.log(req.body)
+        console.log(req.body)
         const inserted = await insertExpenses(req.body);
         res.status(201).json({
             status: "success",
@@ -92,6 +93,16 @@ app.get("/monthly-summary/:month", async (req, res) => {
 app.get("/analyze/recommendations/:month", async (req, res) => {
     try {
         const result = await analyzeRecommendations(req.params.month);
+        res.json(result);
+    } catch (e) {
+        res.status(400).json({ error: e.message });
+    }
+});
+
+app.post("/analyze/anomaly", async (req, res) => {
+    
+    try {
+        const result = await detect_anomaly(req.body);
         res.json(result);
     } catch (e) {
         res.status(400).json({ error: e.message });

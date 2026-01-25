@@ -1,5 +1,11 @@
 import pandas as pd
-from app.model_loader import model
+from pathlib import Path
+from app.model_loader import savings_model as model
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "monthly_summary.csv"
+
+df = pd.read_csv(DATA_PATH)
 
 # =========================
 # LOAD CSV

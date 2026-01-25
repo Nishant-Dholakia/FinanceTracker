@@ -79,7 +79,7 @@ const detectedCurrency = transactions.length > 0 ? transactions[0].currency : 'I
   return {
     currency: detectedCurrency,
     user: { name: "Simon K. Jimmy", role: "Mortgage Consultant", img: "https://i.pravatar.cc/150?img=11" },
-    balance: 150000 - monthlySpending, // Mock logic: Starting balance - spent
+    balance: 190000 - 10000, // Mock logic: Starting balance - spent
     netWorth: 278378,
     monthlyIncome: 50000, // Mock fixed income
     monthlySpending,

@@ -1,7 +1,13 @@
+// src/services/apiService.js
 import apiClient from "../config/ApiClient";
 
-export const getAllExpenses = async () => {
-    const response = await apiClient.get(`/expenses`);
+export async function getAllExpenses() {
+  const response = await apiClient.get("/expenses");
+  return response.data;
+}
+
+export async function addExpense(expensesData) {
+  const response = await apiClient.post("/expenses", expensesData);
   return response.data;
 };
 
@@ -11,11 +17,6 @@ export const getExpenseByMonth = async (month) => {
 };
 
 
-export const addExpense = async (expensesData) => {
-  // console.log(expensesData);
-    const response = await apiClient.post(`/expenses`,expensesData);
-  return response.data;
-};
 
 export const addIncomeToMonth = async (incomeData) => {
   console.log(incomeData);
