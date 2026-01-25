@@ -1,8 +1,9 @@
 import express from "express";
-import { fetchAllExpenses, insertExpenses } from "./src/services/expenseService.js";
+import { fetchAllExpenses, getExpensesByMonth, insertExpenses } from "./src/services/expenseService.js";
 import cors from "cors";
 import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 import { insertIncome } from "./src/services/incomeService.js";
+import { getMonthlySummaryByMonth } from "./src/services/monthlySummaryService.js";
 
 const port = 3000;
 const app = express();
@@ -49,6 +50,7 @@ app.get("/expenses", async (_, res) => {
 app.get("/expenses/month/:month", async (req, res) => {
     try {
         const data = await getExpensesByMonth(req.params.month);
+       
         res.json(data);
     } catch (e) {
         res.status(400).json({ error: e.message });
@@ -80,6 +82,7 @@ app.get("/monthly-summary", async (req, res) => {
 app.get("/monthly-summary/:month", async (req, res) => {
     try {
         const data = await getMonthlySummaryByMonth(req.params.month);
+        console.log(req.params.month);
         res.json(data);
     } catch (e) {
         res.status(400).json({ error: e.message });

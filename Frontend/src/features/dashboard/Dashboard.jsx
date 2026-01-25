@@ -129,12 +129,16 @@ const Dashboard = () => {
                 <StatsRow 
                     data={dashboardData} 
                     currency={dashboardData.currency} 
+                     selectedYear={selectedYear}     
+    selectedMonth={selectedMonth}
                 />
                 
                 {/* 3. Pass currency to MainCharts */}
                 <MainCharts 
                     data={dashboardData} 
                     currency={dashboardData.currency} 
+                    selectedYear={selectedYear}     
+    selectedMonth={selectedMonth}
                 />
             </div>
              </>
