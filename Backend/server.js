@@ -1,7 +1,10 @@
 import express from "express";
-import { fetchAllExpenses, insertExpenses } from "./src/services/expenseService.js";
+//import { fetchAllExpenses, getExpensesByMonth, insertExpenses } from "./src/services/expenseService.js";
+//import { getMonthlySummary, getMonthlySummaryByMonth } from "./src/services/monthlySummaryService.js";
+//import { insertIncome } from "./src/services/incomeService.js";
 import cors from "cors";
-import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
+//import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
+import fetch from "node-fetch";
 
 const port = 3000;
 const app = express();
@@ -9,7 +12,7 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: "http://localhost:5174", // ✅ your frontend
+        origin: ["http://localhost:5173", "http://localhost:5174"], // ✅ Allow both frontend ports
         credentials: true, // ✅ allow cookies/credentials
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
@@ -92,6 +95,78 @@ app.get("/analyze/recommendations/:month", async (req, res) => {
         res.status(400).json({ error: e.message });
     }
 });
+
+// app.post("/predict/monthly", async (req, res) => {
+//     try {
+//         const { month, income, expenses } = req.body;
+        
+//         if (!month || !income || !expenses) {
+//             return res.status(400).json({ error: "Missing required fields: month, income, expenses" });
+//         }
+
+//         // Format month to YYYY-MM if it's YYYY-MM-DD
+//         const formattedMonth = month.includes('-01') ? month.slice(0, 7) : month;
+
+//         // Call ML service
+//         const response = await fetch("http://localhost:8000/predict", {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify({
+//                 month: formattedMonth,
+//                 income: parseFloat(income),
+//                 expenses: expenses
+//             }),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error("ML service failed");
+//         }
+
+//         const result = await response.json();
+//         res.json(result);
+//     } catch (e) {
+//         res.status(400).json({ error: e.message });
+//     }
+// });
+
+app.post("/predict/monthly", async (req, res) => {
+    try {
+        console.log("✅ Predict Monthly API hit");
+        console.log("📦 Data from React:", req.body);
+
+        const { month, income, expenses } = req.body;
+
+        if (!month || income === undefined || !expenses) {
+            return res.status(400).json({ error: "Missing fields" });
+        }
+
+        const formattedMonth = month.slice(0, 7);
+
+        console.log("📅 Month:", formattedMonth);
+        console.log("💰 Income:", income);
+        console.log("🛒 Expenses:", expenses);
+
+        const response = await fetch("http://127.0.0.1:8000/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                month: formattedMonth,
+                income,
+                expenses
+            }),
+        });
+
+        const result = await response.json();
+
+        console.log("🤖 ML Response:", result);
+
+        res.json(result);
+    } catch (err) {
+        console.error("❌ Error:", err.message);
+        res.status(400).json({ error: err.message });
+    }
+});
+
 
 app.listen(port, () => {
     console.log("Backend running on port 3000");
