@@ -177,10 +177,11 @@ export async function fetchAllExpenses() {
     return data;
 }
 export async function getExpensesByMonth(month) {
-    // Expect YYYY-MM
-    if (!/^\d{4}-\d{2}$/.test(month)) {
-        throw new Error("Month must be in YYYY-MM format");
+    // Expect YYYY-MM-01
+    if (!/^\d{4}-(0[1-9]|1[0-2])-01$/.test(month)) {
+        throw new Error("Date must be in YYYY-MM-01 format");
     }
+
 
     const [year, mon] = month.split("-").map(Number);
 

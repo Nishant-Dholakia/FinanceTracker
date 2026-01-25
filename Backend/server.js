@@ -4,6 +4,7 @@ import cors from "cors";
 import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 import { insertIncome } from "./src/services/incomeService.js";
 import { detect_anomaly } from "./src/services/anomalyService.js";
+import { detectMonthlyAnomalies } from "./src/services/monthlyAnomalyService.js";
 
 const port = 3000;
 const app = express();
@@ -96,15 +97,23 @@ app.get("/analyze/recommendations/:month", async (req, res) => {
     }
 });
 
-app.post("/analyze/anomaly", async (req, res) => {
-    
+app.post("/anomalies/month", async (req, res) => {
     try {
-        const result = await detect_anomaly(req.body);
-        res.json(result);
-    } catch (e) {
-        res.status(400).json({ error: e.message });
+        const { month } = req.body;
+
+        // Expect YYYY-MM-01
+        if (!/^\d{4}-(0[1-9]|1[0-2])-01$/.test(month)) {
+            throw new Error("Month must be in YYYY-MM-01 format");
+        }
+
+        const result = await detectMonthlyAnomalies(month);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
     }
 });
+
 
 app.listen(port, () => {
     console.log("Backend running on port 3000");
