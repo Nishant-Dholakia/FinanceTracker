@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { getAllExpenses, getMonthlySummaryByMonth } from "../services/apiService";
+import { getExpenseByMonth } from "../services/apiService";
 
 export default function Check() {
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const expenseData = await getMonthlySummaryByMonth('2026-01-01');
+                const expenseData = await getExpenseByMonth('2026-01-01');
                 console.log(expenseData);
             } catch (err) {
                 console.error("Failed to fetch expenses:", err);
