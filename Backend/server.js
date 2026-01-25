@@ -4,16 +4,21 @@ import cors from "cors";
 import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 import { insertIncome } from "./src/services/incomeService.js";
 import { getMonthlySummaryByMonth } from "./src/services/monthlySummaryService.js";
-import { detect_anomaly } from "./src/services/anomalyService.js";
 import { detectMonthlyAnomalies } from "./src/services/monthlyAnomalyService.js";
 
+// import { insertIncome } from "./src/services/incomeService.js";
+
+//import fetch from "node-fetch";
 const port = 3000;
 const app = express();
 app.use(express.json());
 
 app.use(
     cors({
-        origin: "http://localhost:5173", // ✅ your frontend
+
+        origin: ["http://localhost:5173", "http://localhost:5174"], // ✅ Allow both frontend ports
+
+      
         credentials: true, // ✅ allow cookies/credentials
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],

@@ -18,8 +18,9 @@ export async function detectMonthlyAnomalies(month) {
 
             if (result.suspicious) {
                 anomalies.push({
-                    expense_id: expense.id,
-                    ...result,
+                    ...expense,
+                    suspicious: result.suspicious,
+                    reason: result.reason,
                 });
             }
         } catch (err) {
@@ -35,6 +36,8 @@ export async function detectMonthlyAnomalies(month) {
         total_expenses: expenses.length,
         anomaly_count: anomalies.length,
         anomalies,
-        failed, // optional, useful for debugging
+        failed,
     };
 }
+
+

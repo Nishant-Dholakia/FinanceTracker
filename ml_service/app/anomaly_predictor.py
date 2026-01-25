@@ -1,14 +1,19 @@
+import numpy as np
+import pandas as pd
+
 from app.model_loader import (
     anomaly_model,
     anomaly_encoder,
     category_stats,
     known_categories
 )
-import numpy as np
-import pandas as pd
 
 
-def detect_anomaly(expense: dict):
+def detect_anomaly(expense: dict) -> dict:
+    """
+    Core anomaly detection logic.
+    """
+
     category = expense["category_code"]
 
     if category not in known_categories:
@@ -21,7 +26,19 @@ def detect_anomaly(expense: dict):
 
     amount = float(expense["amount"])
     is_discretionary = int(expense["is_discretionary"])
-    date = pd.to_datetime(expense["transaction_date"])
+    date = pd.to_datetime(expense["transaction_date"], errors="coerce")
+
+    if pd.isna(date):
+        return {
+            "suspicious": False,
+            "risk_score": 0.0,
+            "ml_score": 0.0,
+            "reason": "invalid transaction_date"
+        }
+
+    # -------------------------
+    # Feature engineering
+    # -------------------------
 
     log_amount = np.log1p(amount)
     category_encoded = anomaly_encoder.transform([category])[0]
@@ -34,10 +51,17 @@ def detect_anomaly(expense: dict):
         day_of_week
     ]]
 
+    # -------------------------
+    # ML signal
+    # -------------------------
+
     ml_score = float(anomaly_model.decision_function(X)[0])
     ml_risk = max(0.0, 1 - (ml_score + 0.5))
 
+    # -------------------------
     # Statistical deviation
+    # -------------------------
+
     stats = category_stats[category]
     deviation_risk = 0.0
     reasons = []
@@ -60,7 +84,10 @@ def detect_anomaly(expense: dict):
 
     deviation_risk = min(deviation_risk, 1.0)
 
+    # -------------------------
     # Final score
+    # -------------------------
+
     final_score = (0.4 * ml_risk) + (0.6 * deviation_risk)
     suspicious = final_score >= 0.5
 
