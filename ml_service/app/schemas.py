@@ -37,3 +37,22 @@ class PredictionResponse(BaseModel):
 
     alerts: List[str]
     future_advice: List[str]
+
+# =========================
+# ANOMALY REQUEST
+# =========================
+class AnomalyRequest(BaseModel):
+    amount: float
+    category_code: str
+    is_discretionary: int
+    transaction_date: str
+
+
+# =========================
+# ANOMALY RESPONSE
+# =========================
+class AnomalyResponse(BaseModel):
+    suspicious: bool
+    risk_score: float
+    ml_score: float
+    reason: str

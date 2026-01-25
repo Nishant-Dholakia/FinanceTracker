@@ -3,8 +3,13 @@ import express from "express";
 //import { getMonthlySummary, getMonthlySummaryByMonth } from "./src/services/monthlySummaryService.js";
 //import { insertIncome } from "./src/services/incomeService.js";
 import cors from "cors";
+<<<<<<< HEAD
 //import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 import fetch from "node-fetch";
+=======
+import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
+import { insertIncome } from "./src/services/incomeService.js";
+>>>>>>> 4a1226b87510df3104e19e2a66c773e6fc2868a8
 
 const port = 3000;
 const app = express();
@@ -12,7 +17,11 @@ app.use(express.json());
 
 app.use(
     cors({
+<<<<<<< HEAD
         origin: ["http://localhost:5173", "http://localhost:5174"], // ✅ Allow both frontend ports
+=======
+        origin: "http://localhost:5173", // ✅ your frontend
+>>>>>>> 4a1226b87510df3104e19e2a66c773e6fc2868a8
         credentials: true, // ✅ allow cookies/credentials
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
@@ -59,6 +68,7 @@ app.get("/expenses/month/:month", async (req, res) => {
 
 app.post("/income", async (req, res) => {
     try {
+        console.log(req.body)
         await insertIncome(req.body);
         res.status(201).json({ status: "success" });
     } catch (err) {

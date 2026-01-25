@@ -18,12 +18,14 @@ import {
   Settings, 
   Menu as MenuIcon,
   KeyboardArrowDown,
-  Add
+  Add,
+  AccountBalanceWallet
 } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 
 // Import the new modal
 import AddExpenseModal from '../features/addExpense/AddExpenseModal';
+import AddIncomeModal from '../features/addIncome/AddIncomeModal';
 
 // --- STYLED COMPONENTS FOR SEARCH (Kept same as before) ---
 const SearchContainer = styled('div')(({ theme }) => ({
@@ -71,7 +73,10 @@ const Navbar = ({ onMenuClick }) => {
   
   // State for Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false); // New state
 
+
+  const handleSaveIncome = (data) => console.log("Saving Income:", data); // New handler
   // MOCK SERVICE HANDLER
   const handleSaveExpense = (expenseData) => {
     console.log("Making request to backend service...", expenseData);
@@ -164,6 +169,22 @@ const Navbar = ({ onMenuClick }) => {
             >
                 Add Expense
             </Button>
+            <Button
+                variant="contained"
+                startIcon={<AccountBalanceWallet />}
+                onClick={() => setIsIncomeModalOpen(true)}
+                sx={{
+                    background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                    borderRadius: '20px',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    px: 3,
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+                    display: { xs: 'none', sm: 'flex' }
+                }}
+            >
+                Add Income
+            </Button>
             {/* Mobile simplified button */}
             <IconButton 
                 onClick={() => setIsModalOpen(true)}
@@ -224,6 +245,11 @@ const Navbar = ({ onMenuClick }) => {
         open={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onSave={handleSaveExpense} 
+      />
+      <AddIncomeModal 
+        open={isIncomeModalOpen} 
+        onClose={() => setIsIncomeModalOpen(false)} 
+        onSave={handleSaveIncome} 
       />
     </>
   );
