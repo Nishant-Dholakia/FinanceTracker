@@ -1,6 +1,7 @@
 import express from "express";
 import { fetchAllExpenses, insertExpenses } from "./src/services/expenseService.js";
 import cors from "cors";
+import { analyzeRecommendations } from "./src/services/futureRecommendationService.js";
 import { insertIncome } from "./src/services/incomeService.js";
 import { detect_anomaly } from "./src/services/anomalyService.js";
 
@@ -96,17 +97,14 @@ app.get("/analyze/recommendations/:month", async (req, res) => {
 });
 
 app.post("/analyze/anomaly", async (req, res) => {
+    
     try {
         const result = await detect_anomaly(req.body);
-        res.status(200).json(result);
-    } catch (err) {
-        console.error("Anomaly error:", err);
-        res.status(400).json({
-            error: err.message || "Anomaly analysis failed",
-        });
+        res.json(result);
+    } catch (e) {
+        res.status(400).json({ error: e.message });
     }
 });
-
 
 app.listen(port, () => {
     console.log("Backend running on port 3000");
