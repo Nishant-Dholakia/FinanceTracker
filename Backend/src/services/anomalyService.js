@@ -7,20 +7,26 @@ export async function detect_anomaly(expense) {
     if (!expense || typeof expense !== "object") {
         throw new Error("Request body missing or invalid");
     }
-
-    const {
+    
+    var {
         amount,
         category_code,
         is_discretionary,
         transaction_date,
     } = expense;
-
+    
+    // ✅ FORCE boolean → int
+    if (typeof is_discretionary === "boolean") {
+        is_discretionary = is_discretionary ? 1 : 0;
+    }
+    // console.log(expense);
     // Strict validation
     if (
         typeof amount !== "number" ||
         !Number.isFinite(amount) ||
         typeof category_code !== "string" ||
         typeof is_discretionary !== "number" ||
+        
         typeof transaction_date !== "string"
     ) {
         throw new Error("Invalid anomaly request payload");

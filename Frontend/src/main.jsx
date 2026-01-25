@@ -7,7 +7,11 @@ import Dashboard from "./features/dashboard/Dashboard"
 import MainLayout from './MainLayout.jsx';
 import Check from './components/Check.jsx';
 import MonthlyInsights from './features/insights/MonthlyInsights.jsx'
+<<<<<<< HEAD
 import MonthlyTransactions from './features/expenseHistory/MonthlyTransactions.jsx';
+=======
+import CheckAnomalyPage from './features/anomaly/CheckAnomaly.jsx';
+>>>>>>> f73724787518b167a2711df06abe1b87121be8b8
 
 
 // ✅ FIX: Import from the CURRENT directory, not the old project
@@ -33,6 +37,10 @@ const router = createBrowserRouter([
      {
         path: "/monthly-insights",
         element: <MonthlyInsights />
+      },
+      {
+        path: "/check-anomaly",
+        element: <CheckAnomalyPage />
       }
     ]}
 ]);

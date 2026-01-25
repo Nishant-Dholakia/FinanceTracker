@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Dict, List, Optional
 
 
@@ -38,19 +38,13 @@ class PredictionResponse(BaseModel):
     alerts: List[str]
     future_advice: List[str]
 
-# =========================
-# ANOMALY REQUEST
-# =========================
 class AnomalyRequest(BaseModel):
-    amount: float
+    amount: float = Field(..., gt=0)
     category_code: str
-    is_discretionary: int
+    is_discretionary: int = Field(..., ge=0, le=1)
     transaction_date: str
 
 
-# =========================
-# ANOMALY RESPONSE
-# =========================
 class AnomalyResponse(BaseModel):
     suspicious: bool
     risk_score: float
