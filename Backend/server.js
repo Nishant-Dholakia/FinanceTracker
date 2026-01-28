@@ -26,9 +26,9 @@ app.get("/health", (_, res) => {
 });
 
 app.post("/expenses", async (req, res) => {
-    console.log("api called")
+    // console.log("api called")
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const inserted = await insertExpenses(req.body);
         res.status(201).json({
             status: "success",
@@ -63,7 +63,7 @@ app.get("/expenses/month/:month", async (req, res) => {
 
 app.post("/income", async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         await insertIncome(req.body);
         res.status(201).json({ status: "success" });
     } catch (err) {
@@ -86,7 +86,7 @@ app.get("/monthly-summary", async (req, res) => {
 app.get("/monthly-summary/:month", async (req, res) => {
     try {
         const data = await getMonthlySummaryByMonth(req.params.month);
-        console.log(req.params.month);
+        // console.log(req.params.month);
         res.json(data);
     } catch (e) {
         res.status(400).json({ error: e.message });
