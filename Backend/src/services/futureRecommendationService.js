@@ -7,7 +7,7 @@ export async function analyzeRecommendations(month) {
         throw new Error("Month must be YYYY-MM-01");
     }
 
-    // 1️⃣ Fetch monthly summary
+    // Fetch monthly summary
     const { data: summary } = await supabase
         .from("monthly_summary")
         .select("*")
@@ -18,28 +18,28 @@ export async function analyzeRecommendations(month) {
         throw new Error("Monthly summary not found");
     }
 
-    // 2️⃣ Fetch expenses for month
+    // Fetch expenses for month
     const { data: expenses } = await supabase
         .from("expenses")
         .select("category_code, amount")
         .gte("transaction_date", month)
         .lte("transaction_date", month.slice(0, 8) + "31");
 
-    // 3️⃣ Aggregate category-wise
+    // Aggregate category-wise
     const categoryMap = {};
     for (const e of expenses) {
         categoryMap[e.category_code] =
             (categoryMap[e.category_code] || 0) + e.amount;
     }
 
-    // 4️⃣ Build ML payload
+    // Build ML payload
     const payload = {
         month: month.slice(0, 7), // YYYY-MM
         income: summary.total_income,
         expenses: categoryMap,
     };
 
-    // 5️⃣ Call Python ML service
+    // Call Python ML service
 
     const response = await fetch(`${process.env.ML_API_URL}/predict`, {
   method: "POST",

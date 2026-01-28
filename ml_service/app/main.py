@@ -1,9 +1,10 @@
+from http.client import HTTPException
 from fastapi import FastAPI
 from app.schemas import (
+    AnomalyBatchRequest,
+    AnomalyBatchResponse,
     PredictionRequest,
     PredictionResponse,
-    AnomalyRequest,
-    AnomalyResponse
 )
 from app.predictor import run_prediction
 from app.anomaly_predictor import detect_anomaly
@@ -22,6 +23,37 @@ def predict(data: PredictionRequest):
         expenses=data.expenses
     )
 
-@app.post("/anomaly-detect", response_model=AnomalyResponse)
-def anomaly_detect(data: AnomalyRequest):
-    return detect_anomaly(data.dict())
+MAX_BATCH_SIZE = 500
+
+
+@app.post(
+    "/anomaly-detect-batch",
+    response_model=AnomalyBatchResponse
+)
+def anomaly_detect_batch(data: AnomalyBatchRequest):
+
+    if len(data.expenses) > MAX_BATCH_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail="Batch size too large"
+        )
+
+    results = []
+
+    for expense in data.expenses:
+        try:
+            prediction = detect_anomaly(expense.dict())
+            results.append({
+                "id": expense.id,
+                **prediction
+            })
+        except Exception as e:
+            results.append({
+                "id": expense.id,
+                "suspicious": False,
+                "risk_score": 0.0,
+                "ml_score": 0.0,
+                "reason": f"prediction_failed: {str(e)}"
+            })
+
+    return {"results": results}

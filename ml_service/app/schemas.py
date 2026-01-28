@@ -38,15 +38,25 @@ class PredictionResponse(BaseModel):
     alerts: List[str]
     future_advice: List[str]
 
-class AnomalyRequest(BaseModel):
+class AnomalyItem(BaseModel):
+    id: str
     amount: float = Field(..., gt=0)
     category_code: str
     is_discretionary: int = Field(..., ge=0, le=1)
     transaction_date: str
 
 
-class AnomalyResponse(BaseModel):
+class AnomalyBatchRequest(BaseModel):
+    expenses: List[AnomalyItem]
+
+
+class AnomalyItemResponse(BaseModel):
+    id: str
     suspicious: bool
     risk_score: float
     ml_score: float
     reason: str
+
+
+class AnomalyBatchResponse(BaseModel):
+    results: List[AnomalyItemResponse]

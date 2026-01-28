@@ -11,10 +11,15 @@ from app.model_loader import (
 
 def detect_anomaly(expense: dict) -> dict:
     """
-    Core anomaly detection logic.
+    Core anomaly detection logic (single expense).
+    Safe, deterministic, batch-compatible.
     """
 
-    category = expense["category_code"]
+    # -------------------------
+    # Basic validation
+    # -------------------------
+
+    category = expense.get("category_code")
 
     if category not in known_categories:
         return {
@@ -24,9 +29,25 @@ def detect_anomaly(expense: dict) -> dict:
             "reason": "unknown category"
         }
 
-    amount = float(expense["amount"])
-    is_discretionary = int(expense["is_discretionary"])
-    date = pd.to_datetime(expense["transaction_date"], errors="coerce")
+    try:
+        amount = float(expense.get("amount"))
+    except Exception:
+        amount = None
+
+    if amount is None or not np.isfinite(amount) or amount <= 0:
+        return {
+            "suspicious": False,
+            "risk_score": 0.0,
+            "ml_score": 0.0,
+            "reason": "invalid amount"
+        }
+
+    try:
+        is_discretionary = int(expense.get("is_discretionary"))
+    except Exception:
+        is_discretionary = 0
+
+    date = pd.to_datetime(expense.get("transaction_date"), errors="coerce")
 
     if pd.isna(date):
         return {
@@ -56,7 +77,7 @@ def detect_anomaly(expense: dict) -> dict:
     # -------------------------
 
     ml_score = float(anomaly_model.decision_function(X)[0])
-    ml_risk = max(0.0, 1 - (ml_score + 0.5))
+    ml_risk = max(0.0, 1.0 - (ml_score + 0.5))
 
     # -------------------------
     # Statistical deviation
