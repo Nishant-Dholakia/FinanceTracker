@@ -76,6 +76,7 @@ const MonthlyTransactions = () => {
       try {
         const dateParam = `${selectedYear}-${selectedMonth}-01`;
         const data = await getExpenseByMonth(dateParam);
+        console.log(data)
         setTransactions(data || []);
       } catch (error) {
         console.error(error);
