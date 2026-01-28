@@ -3,15 +3,12 @@ import { createRoot } from 'react-dom/client'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css'; // Don't forget to uncomment this if you want Tailwind to work!
-import Dashboard from "./features/dashboard/Dashboard"
 import MainLayout from './MainLayout.jsx';
 import Check from './components/Check.jsx';
 import MonthlyInsights from './features/insights/MonthlyInsights.jsx'
-<<<<<<< HEAD
 import MonthlyTransactions from './features/expenseHistory/MonthlyTransactions.jsx';
-=======
 import CheckAnomalyPage from './features/anomaly/CheckAnomaly.jsx';
->>>>>>> f73724787518b167a2711df06abe1b87121be8b8
+import Dashboard from './features/Dashboard/Dashboard.jsx';
 
 
 // ✅ FIX: Import from the CURRENT directory, not the old project
@@ -24,7 +21,7 @@ const router = createBrowserRouter([
     children: [
       { 
     path: "/dashboard", 
-    element: <Dashboard/>
+    element: <Dashboard />,
    },
     { 
     path: "/test", 
