@@ -24,7 +24,7 @@ import {
   WarningAmber
 } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 // Import the new modal
@@ -72,11 +72,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: '100%',
   },
 }));
-
-const handleCheckAnomaly = (payload) => {
-  console.log('Calling anomaly service...', payload);
-  // TODO: call FastAPI anomaly endpoint here
-};
 
 
 const Navbar = ({ onMenuClick }) => {
@@ -138,14 +133,16 @@ const Navbar = ({ onMenuClick }) => {
             >
               <Typography variant="h6" fontWeight="bold" color="white">F</Typography>
             </Box>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: 700, color: 'white', letterSpacing: '-0.5px' }}
-            >
-              FinTrak
-            </Typography>
+            <Link to="/dashboard">
+                <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: 700, color: 'white', letterSpacing: '-0.5px' }}
+                    >
+                    FinTrak
+                </Typography>
+                </Link>
           </Box>
 
           {/* SEARCH BAR */}

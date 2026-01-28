@@ -36,6 +36,7 @@ export async function detect_anomaly(expense) {
 
     let response;
     try {
+        console.log(`calling ${ML_SERVICE_URL}`)
         response = await fetch(ML_SERVICE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

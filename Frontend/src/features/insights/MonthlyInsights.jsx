@@ -142,109 +142,158 @@ export default function MonthlyInsights() {
     );
   }
 
-  /* ---------------- UI ---------------- */
+  /* -------------------- UI -------------------- */
 
-  return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Box className="min-h-screen bg-[#0f1219] text-white p-6">
-        <Box className="max-w-6xl mx-auto space-y-6">
+return (
+  <ThemeProvider theme={darkTheme}>
+    <CssBaseline />
+    <Box sx={{ minHeight: "100vh", bgcolor: "#0f1219", p: 4, color: "#F8FAFC" }}>
+      <Box sx={{ maxWidth: 1200, mx: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
 
-          {/* HEADER */}
-          <Box className="flex flex-wrap items-center justify-between gap-4">
-            <Typography variant="h3">{safeData.month}</Typography>
+        {/* HEADER */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h3" fontWeight={800}>
+            Monthly Insights — {safeData.month}
+          </Typography>
 
-            <ButtonGroup size="small" variant="outlined">
-              <Button
-                onClick={() => setCurrency("USD")}
-                color={currency === "USD" ? "primary" : "inherit"}
-              >
-                USD
-              </Button>
-              <Button
-                onClick={() => setCurrency("INR")}
-                color={currency === "INR" ? "primary" : "inherit"}
-              >
-                INR
-              </Button>
-            </ButtonGroup>
-          </Box>
+          <ButtonGroup size="small" variant="outlined">
+            <Button onClick={() => setCurrency("INR")} color={currency === "INR" ? "primary" : "inherit"}>
+              INR
+            </Button>
+            <Button onClick={() => setCurrency("USD")} color={currency === "USD" ? "primary" : "inherit"}>
+              USD
+            </Button>
+          </ButtonGroup>
+        </Box>
 
-          {/* SUMMARY */}
-          <Box className="grid grid-cols-12 gap-6">
-            <Card className="col-span-12 md:col-span-4">
-              <CardContent>
-                <Typography color="text.secondary">Income</Typography>
-                <Typography variant="h4">
-                  {formatCurrency(income, currency)}
-                </Typography>
-              </CardContent>
-            </Card>
-
-            <Card className="col-span-12 md:col-span-4">
-              <CardContent>
-                <Typography color="text.secondary">Total Expense</Typography>
-                <Typography variant="h4" color="error.main">
-                  {formatCurrency(totalExpense, currency)}
-                </Typography>
-                {topCategory && (
-                  <Typography color="text.secondary">
-                    Top driver: {topCategory.category}
-                  </Typography>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className="col-span-12 md:col-span-4">
-              <CardContent>
-                <Typography color="text.secondary">
-                  Predicted Savings
-                </Typography>
-                <Typography variant="h4" color="success.main">
-                  {formatCurrency(
-                    safeData.predicted_savings ?? 0,
-                    currency
-                  )}
-                </Typography>
-                <LinearProgress
-                  variant="determinate"
-                  value={Math.min(safeData.savings_rate ?? 0, 100)}
-                  sx={{ mt: 1 }}
-                />
-              </CardContent>
-            </Card>
-          </Box>
-
-          {/* CATEGORY LIST */}
+        {/* SUMMARY CARDS */}
+        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 3 }}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Category Wise Expenses</Typography>
-              <Divider sx={{ my: 2 }} />
-
-              {categoryStats.map(({ category, amount, percentage }) => (
-                <Box key={category} mb={2}>
-                  <Box className="flex justify-between">
-                    <Typography className="capitalize">
-                      {category}
-                    </Typography>
-                    <Typography>
-                      {categoryView === "amount"
-                        ? formatCurrency(amount, currency)
-                        : formatPct(percentage)}
-                    </Typography>
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={Math.min(percentage, 100)}
-                    sx={{ height: 8, borderRadius: 4 }}
-                  />
-                </Box>
-              ))}
+              <Typography color="text.secondary">Income</Typography>
+              <Typography variant="h4">{formatCurrency(income, currency)}</Typography>
             </CardContent>
           </Card>
 
+          <Card>
+            <CardContent>
+              <Typography color="text.secondary">Total Expense</Typography>
+              <Typography variant="h4" color="error.main">
+                {formatCurrency(totalExpense, currency)}
+              </Typography>
+              <Typography color="text.secondary" mt={1}>
+                Expense Ratio: <strong>{safeData.expense_ratio?.toFixed(2)}%</strong>
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Typography color="text.secondary">Predicted Savings</Typography>
+              <Typography variant="h4" color="success.main">
+                {formatCurrency(safeData.predicted_savings ?? 0, currency)}
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={Math.min(safeData.savings_rate ?? 0, 100)}
+                sx={{ mt: 2, height: 8, borderRadius: 4 }}
+              />
+              <Typography variant="caption" color="text.secondary">
+                Savings Rate: {formatPct(safeData.savings_rate)}
+              </Typography>
+            </CardContent>
+          </Card>
         </Box>
+
+        {/* PREVIOUS MONTH COMPARISON */}
+        {safeData.month_comparison && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6">Month Comparison</Typography>
+              <Divider sx={{ my: 2 }} />
+              <Typography color="text.secondary">
+                Previous Month: <strong>{safeData.month_comparison.previous_month}</strong>
+              </Typography>
+              <Typography color="text.secondary">
+                Previous Savings:{" "}
+                <strong>
+                  {formatCurrency(
+                    safeData.month_comparison.previous_savings,
+                    currency
+                  )}
+                </strong>
+              </Typography>
+              <Typography
+                color={safeData.month_comparison.change_rate < 0 ? "error.main" : "success.main"}
+                fontWeight={700}
+              >
+                Change Rate: {formatPct(safeData.month_comparison.change_rate)}
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* CATEGORY EXPENSES */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6">Category-wise Expenses</Typography>
+            <Divider sx={{ my: 2 }} />
+
+            {categoryStats.map(({ category, amount, percentage }) => (
+              <Box key={category} mb={2}>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography fontWeight={600}>{category}</Typography>
+                  <Typography>
+                    {formatCurrency(amount, currency)} ({formatPct(percentage)})
+                  </Typography>
+                </Box>
+                <LinearProgress
+                  variant="determinate"
+                  value={Math.min(percentage, 100)}
+                  sx={{ height: 8, borderRadius: 4, mt: 0.5 }}
+                />
+              </Box>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* ALERTS */}
+        {safeData.alerts?.length > 0 && (
+          <Card sx={{ border: "1px solid rgba(248,113,113,0.6)" }}>
+            <CardContent>
+              <Typography variant="h6" color="error.main">
+                Alerts
+              </Typography>
+              <Divider sx={{ my: 2 }} />
+              {safeData.alerts.map((alert, idx) => (
+                <Typography key={idx} sx={{ color: "#FCA5A5", mb: 1 }}>
+                  {alert}
+                </Typography>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* FUTURE ADVICE */}
+        {safeData.future_advice?.length > 0 && (
+          <Card sx={{ border: "1px solid rgba(250,204,21,0.6)" }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: "#FACC15" }}>
+                Future Advice
+              </Typography>
+              <Divider sx={{ my: 2 }} />
+              {safeData.future_advice.map((tip, idx) => (
+                <Typography key={idx} sx={{ color: "#FDE68A", mb: 1 }}>
+                  {tip}
+                </Typography>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
       </Box>
-    </ThemeProvider>
-  );
+    </Box>
+  </ThemeProvider>
+);
+
 }
