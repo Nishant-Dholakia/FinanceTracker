@@ -8,8 +8,7 @@ import Check from './components/Check.jsx';
 import MonthlyInsights from './features/insights/MonthlyInsights.jsx'
 import MonthlyTransactions from './features/expenseHistory/MonthlyTransactions.jsx';
 import CheckAnomalyPage from './features/anomaly/CheckAnomaly.jsx';
-import Dashboard from './features/Dashboard/Dashboard.jsx';
-
+import Dashboard from "./features/dashboard/Dashboard.jsx"
 
 // ✅ FIX: Import from the CURRENT directory, not the old project
 
