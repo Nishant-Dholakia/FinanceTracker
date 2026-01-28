@@ -40,15 +40,24 @@ export async function analyzeRecommendations(month) {
     };
 
     // 5️⃣ Call Python ML service
+
     const response = await fetch(`${process.env.ML_API_URL}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-    });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload),
+});
 
     if (!response.ok) {
-        throw new Error("ML service failed");
+    const errorText = await response.text(); // fetch way
+
+    console.error("❌ ML CALL FAILED");
+    console.error("URL:", `${process.env.ML_API_URL}/predict`);
+    console.error("STATUS:", response.status);
+    console.error("DATA:", errorText);
+
+    throw new Error(`ML service error ${response.status}: ${errorText}`);
     }
 
     return await response.json();
+
 }
