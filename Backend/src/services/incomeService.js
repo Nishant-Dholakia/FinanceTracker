@@ -6,18 +6,21 @@ function isValidMonth(month) {
 }
 
 function computeDerived(total_income, total_expense) {
+    // If no income yet, derived metrics are undefined → clamp to 0
+    if (total_income <= 0) {
+        return {
+            savings: 0,
+            savings_rate: 0,
+            expense_ratio: 0,
+        };
+    }
+
     const savings = total_income - total_expense;
-
-    const savings_rate =
-        total_income > 0 ? (savings / total_income) * 100 : 0;
-
-    const expense_ratio =
-        total_income > 0 ? (total_expense / total_income) * 100 : 0;
 
     return {
         savings,
-        savings_rate,
-        expense_ratio,
+        savings_rate: +( (savings / total_income) * 100 ).toFixed(2),
+        expense_ratio: +( (total_expense / total_income) * 100 ).toFixed(2),
     };
 }
 

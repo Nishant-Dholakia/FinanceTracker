@@ -144,7 +144,7 @@ const Navbar = ({ onMenuClick }) => {
               component="div"
               sx={{ display: { xs: 'none', sm: 'block' }, fontWeight: 700, color: 'white', letterSpacing: '-0.5px' }}
             >
-              FinDash
+              FinTrak
             </Typography>
           </Box>
 

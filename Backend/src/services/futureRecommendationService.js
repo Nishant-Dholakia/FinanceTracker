@@ -40,7 +40,7 @@ export async function analyzeRecommendations(month) {
     };
 
     // 5️⃣ Call Python ML service
-    const response = await fetch("http://localhost:8000/predict", {
+    const response = await fetch(`${process.env.ML_API_URL}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

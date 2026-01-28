@@ -10,6 +10,10 @@ from app.anomaly_predictor import detect_anomaly
 
 app = FastAPI(title="Financial ML Service")
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 @app.post("/predict", response_model=PredictionResponse)
 def predict(data: PredictionRequest):
     return run_prediction(
