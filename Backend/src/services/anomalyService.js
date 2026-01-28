@@ -1,7 +1,6 @@
 import fetch from "node-fetch";
 
-const ML_SERVICE_URL =
-    process.env.ML_SERVICE_URL || "http://127.0.0.1:8000/anomaly-detect";
+const ML_SERVICE_URL =`${process.env.ML_API_URL}/anomaly-detect`;
 
 export async function detect_anomaly(expense) {
     if (!expense || typeof expense !== "object") {
@@ -37,6 +36,7 @@ export async function detect_anomaly(expense) {
 
     let response;
     try {
+        // console.log(`calling ${ML_SERVICE_URL}`)
         response = await fetch(ML_SERVICE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

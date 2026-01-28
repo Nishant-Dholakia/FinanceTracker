@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import './index.css'; // Don't forget to uncomment this if you want Tailwind to work!
 import MainLayout from './MainLayout.jsx';
 import Check from './components/Check.jsx';
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
    {
     element: <MainLayout/>,
     children: [
+         {
+        path: "/",
+        element: <Navigate to="/dashboard" replace />,
+      },
       { 
     path: "/dashboard", 
     element: <Dashboard />,

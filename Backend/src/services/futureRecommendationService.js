@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { supabase } from "../supabaseClient.js";
 
 export async function analyzeRecommendations(month) {
+    // console.log(month);
     if (!/^\d{4}-\d{2}-01$/.test(month)) {
         throw new Error("Month must be YYYY-MM-01");
     }
@@ -39,7 +40,7 @@ export async function analyzeRecommendations(month) {
     };
 
     // 5️⃣ Call Python ML service
-    const response = await fetch("http://localhost:8000/predict", {
+    const response = await fetch(`${process.env.ML_API_URL}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

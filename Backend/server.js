@@ -9,29 +9,26 @@ import { detectMonthlyAnomalies } from "./src/services/monthlyAnomalyService.js"
 // import { insertIncome } from "./src/services/incomeService.js";
 
 //import fetch from "node-fetch";
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
 app.use(
-    cors({
-
-        origin: ["http://localhost:5173", "http://localhost:5174"], // ✅ Allow both frontend ports
-
-      
-        credentials: true, // ✅ allow cookies/credentials
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
+
 app.get("/health", (_, res) => {
     res.json({ status: "ok" });
 });
 
 app.post("/expenses", async (req, res) => {
-    console.log("api called")
+    // console.log("api called")
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const inserted = await insertExpenses(req.body);
         res.status(201).json({
             status: "success",
@@ -66,7 +63,7 @@ app.get("/expenses/month/:month", async (req, res) => {
 
 app.post("/income", async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         await insertIncome(req.body);
         res.status(201).json({ status: "success" });
     } catch (err) {
@@ -89,7 +86,7 @@ app.get("/monthly-summary", async (req, res) => {
 app.get("/monthly-summary/:month", async (req, res) => {
     try {
         const data = await getMonthlySummaryByMonth(req.params.month);
-        console.log(req.params.month);
+        // console.log(req.params.month);
         res.json(data);
     } catch (e) {
         res.status(400).json({ error: e.message });
@@ -119,10 +116,20 @@ app.post("/anomalies/month", async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err.message });
-    }
+    }});
+
+app.get("/api/monthly-insights", async (req, res) => {
+  try {
+    const { month } = req.query;
+    const result = await analyzeRecommendations(month);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 
 app.listen(port, () => {
-    console.log("Backend running on port 3000");
+    console.log("Backend running on port ",port);
 });
