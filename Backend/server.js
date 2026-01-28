@@ -9,7 +9,7 @@ import { detectMonthlyAnomalies } from "./src/services/monthlyAnomalyService.js"
 // import { insertIncome } from "./src/services/incomeService.js";
 
 //import fetch from "node-fetch";
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
