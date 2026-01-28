@@ -1,5 +1,6 @@
+import { detectMonthlyAnomaliesBatch } from "./anomalyService.js";
 import { getExpensesByMonth } from "./expenseService.js";
-import { detectMonthlyAnomaliesBatch } from "./monthlyAnomalyService.js";
+
 
 export async function detectMonthlyAnomalies(month) {
     const expenses = await getExpensesByMonth(month);
