@@ -13,7 +13,11 @@ app = FastAPI(title="Financial ML Service")
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "health ok"}
+
+@app.get("/")
+def root():
+    return {"status": "root ok"}
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(data: PredictionRequest):
