@@ -43,7 +43,7 @@ export async function analyzeRecommendations(month) {
 
     const response = await fetch(`${process.env.ML_API_URL}/predict`, {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", "x-api-key": process.env.ML_API_KEY },
   body: JSON.stringify(payload),
 });
 

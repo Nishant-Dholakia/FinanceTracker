@@ -9,7 +9,7 @@ export async function detectMonthlyAnomaliesBatch(expenses) {
     try {
         const response = await fetch(ML_SERVICE_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "x-api-key": process.env.ML_API_KEY },
             body: JSON.stringify({ expenses }),
             signal: controller.signal,
         });
